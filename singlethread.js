@@ -5,7 +5,7 @@ const middleName = require("./data/middle_name.json");
 const lastName = require("./data/last_name.json");
 
 const limit = 100000;
-const outputFile = `${__dirname}/output/batch-${Math.floor(
+const outputFile = `${__dirname}/output/st-${Math.floor(
   Math.random() * 100000
 )}.txt`;
 
