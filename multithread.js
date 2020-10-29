@@ -1,20 +1,39 @@
+#!/usr/bin/env node
+
+// Handles command line arguments
+const yargs = require("yargs/yargs");
+const argv = yargs(process.argv.slice(2)).options({
+  t: { type: "number", alias: "threads", default: 4 },
+  l: { type: "number", alias: "limit", default: 1000 },
+}).argv;
+
 const { Worker, isMainThread } = require("worker_threads");
 const logUpdate = require("log-update");
 
-const limit = 1000000;
-const numOfThreads = 10;
-
+const numOfThreads = argv.t;
+const limit = argv.l;
 const namesPerThread = limit / numOfThreads;
 const outputFile = `${__dirname}/output/mt-${Math.floor(
   Math.random() * 100000
 )}.txt`;
 
-const threadPool = [...Array(numOfThreads)].fill(0);
+// An array where each positional element tracks the number of names it's index-respective thread has computed,
+// e.g namesGeneratedByEachThread[0] represents thread 1's number of computed names
+const namesGeneratedByEachThread = [...Array(numOfThreads)].fill(0);
 
+// A function that will handle keeping track of the number of names computed by each thread, is invoked
+// on each message sent by a worker thread
 function handleMessage(_, index) {
-  threadPool[index]++;
+  // Indexes into the proper position of the namesGeneratedByEachThread array, increments that number
+  namesGeneratedByEachThread[index]++;
+  // Logs update "in place"
   logUpdate(
-    threadPool.map((status, idx) => `Thread ${idx}: ${status}`).join("\n")
+    namesGeneratedByEachThread
+      .map(
+        (numberOfNamesFromThisThread, idx) =>
+          `Thread ${idx}: ${numberOfNamesFromThisThread}`
+      )
+      .join("\n")
   );
 }
 

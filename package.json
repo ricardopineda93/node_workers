@@ -19,6 +19,7 @@
   "homepage": "https://github.com/ricardopineda93/node_workers#readme",
   "dependencies": {
     "fs-extra": "^9.0.1",
-    "log-update": "^4.0.0"
+    "log-update": "^4.0.0",
+    "yargs": "^16.1.0"
   }
 }
