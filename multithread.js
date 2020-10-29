@@ -1,7 +1,7 @@
 const { Worker, isMainThread } = require("worker_threads");
 const logUpdate = require("log-update");
 
-const limit = 10000;
+const limit = 1000000;
 const numOfThreads = 10;
 
 const namesPerThread = limit / numOfThreads;
@@ -12,7 +12,7 @@ const outputFile = `${__dirname}/output/mt-${Math.floor(
 const threadPool = [...Array(numOfThreads)].fill(0);
 
 function handleMessage(_, index) {
-  threadPool[index++];
+  threadPool[index]++;
   logUpdate(
     threadPool.map((status, idx) => `Thread ${idx}: ${status}`).join("\n")
   );
